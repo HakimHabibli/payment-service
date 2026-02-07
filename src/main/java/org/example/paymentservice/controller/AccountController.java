@@ -1,5 +1,8 @@
 package org.example.paymentservice.controller;
 
+import org.example.paymentservice.model.dto.requestdto.Account.CreateAccountDto;
+import org.example.paymentservice.model.dto.requestdto.Account.UpdateAccountDto;
+import org.example.paymentservice.model.dto.responsedto.Account.GetAccountDto;
 import org.example.paymentservice.model.entity.Account;
 import org.example.paymentservice.service.AccountService;
 import org.springframework.http.ResponseEntity;
@@ -18,30 +21,36 @@ public class AccountController
         _accountService = accountService;
     }
 
-    @GetMapping("/getbyid/{id}")
-    public Account getbyid(@PathVariable Long id)
+    @GetMapping("/getById/{id}")
+    public Account getById(@PathVariable Long id)
     {
         return _accountService.findById(id);
     }
 
     @GetMapping("all")
-    public List<Account> getAllAccounts()
+    public List<GetAccountDto> getAllAccounts()
     {
         return _accountService.findAll();
     }
 
     @PostMapping("create")
-    public ResponseEntity<Account> createAccount(@RequestBody Account account)
+    public ResponseEntity<CreateAccountDto> createAccount(@RequestBody CreateAccountDto account)
     {
+        var accountDto = _accountService.createAccount(account);
         return ResponseEntity
-                .ok()
-                .body(_accountService.createAccount(account));
+                .ok(accountDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteAccount(@PathVariable Long id)
     {
         _accountService.deleteAccount(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public UpdateAccountDto updateAccount(@RequestBody UpdateAccountDto account, @PathVariable Long id)
+    {
+       return  _accountService.updateAccount(id, account);
     }
 
 

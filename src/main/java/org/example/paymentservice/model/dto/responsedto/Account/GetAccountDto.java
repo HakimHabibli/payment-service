@@ -1,26 +1,18 @@
-package org.example.paymentservice.model.entity;
-
+package org.example.paymentservice.model.dto.responsedto.Account;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import org.example.paymentservice.model.entity.Transaction;
 import org.example.paymentservice.model.enums.AccountStatus;
 import org.example.paymentservice.model.enums.CurrencyType;
-
 import java.math.BigDecimal;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Account
+
+@Data
+public class GetAccountDto
 {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
     private Long employeeId ;
     private BigDecimal balance ;
     private CurrencyType currency ;
@@ -28,12 +20,5 @@ public class Account
     @Enumerated(EnumType.ORDINAL)
     private AccountStatus status ;
 
-    //RelationField
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Transaction> transactions ;
-
-
 }
-
-
