@@ -139,4 +139,21 @@ public class AccountMapper
                 .build();
 
     }
+
+    /**
+     * Directly maps values from UpdateAccountDto to an Account entity.
+     * Note: This method performs a full overwrite of fields without null checks.
+     *
+     * @param updateDto The source DTO containing new values.
+     * @param account   The target Account entity to be updated.
+     */
+    public void accountToUpdateAccountDto(UpdateAccountDto updateDto, Account account) {
+        if (updateDto == null || account == null) return;
+
+        account.setEmployeeId(updateDto.getEmployeeId());
+        account.setBalance(updateDto.getBalance());
+        account.setCurrency(updateDto.getCurrency());
+        account.setStatus(updateDto.getStatus());
+        account.setTransactions(updateDto.getTransactions());
+    }
 }

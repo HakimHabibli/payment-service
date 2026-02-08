@@ -8,6 +8,7 @@ import org.example.paymentservice.model.dto.responsedto.Account.GetAccountDto;
 import org.example.paymentservice.model.dto.responsedto.Account.GetAllAccountDto;
 import org.example.paymentservice.model.entity.Account;
 import org.example.paymentservice.repository.AccountRepository;
+import org.example.paymentservice.rules.AccountRules;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +18,12 @@ public class AccountService
 {
     private final AccountRepository _accountRepository;
     private final AccountMapper _accountMapper;
+    private final AccountRules _accountRules;
 
-    public AccountService(AccountRepository accountRepository, AccountMapper accountMapper) {
+    public AccountService(AccountRepository accountRepository, AccountMapper accountMapper, AccountRules accountRules) {
         _accountRepository = accountRepository;
         _accountMapper = accountMapper;
+        _accountRules = accountRules;
     }
 
     public List<GetAccountDto> findAll() {
@@ -30,32 +33,26 @@ public class AccountService
 
     public Account findById(Long id)
     {
-        return _accountRepository.findById(id).orElseThrow(()-> new NotFoundException("Account is not found"));
+        return _accountRules.findEntityIfExists(id);
     }
 
     public CreateAccountDto createAccount(CreateAccountDto accountDto) {
-        if(accountDto == null) throw new IllegalArgumentException();
-
         var acc =_accountMapper.createAccountDtoToEntity(accountDto);
+        _accountRules.checkNotNull(acc);
         var savedEntity = _accountRepository.save(acc);
         return _accountMapper.accountEntityToCreateAccountDto(savedEntity);
     }
 
-    public UpdateAccountDto updateAccount(Long id, UpdateAccountDto account) {
+    public UpdateAccountDto updateAccount(Long id, UpdateAccountDto updateDto) {
 
-        return _accountRepository.findById(id).map(oldAccount -> {
+        var account =_accountRules.findEntityIfExists(id);
 
-            oldAccount.setCurrency(account.getCurrency());
-            oldAccount.setBalance(account.getBalance());
-            oldAccount.setTransactions(account.getTransactions());
+        _accountRules.checkBeforeUpdate(account, updateDto);
 
-            oldAccount.setBalance(account.getBalance());
+        _accountMapper.accountToUpdateAccountDto(updateDto, account);
 
-            Account savedAccount = _accountRepository.save(oldAccount);
-
-            return _accountMapper.accountEntityToUpdateAccountDto(savedAccount);
-
-        }).orElseThrow(() -> new RuntimeException("Account tapılmadı!"));
+        Account savedAccount = _accountRepository.save(account);
+        return _accountMapper.accountEntityToUpdateAccountDto(savedAccount);
     }
 
     public void deleteAccount(Long id)

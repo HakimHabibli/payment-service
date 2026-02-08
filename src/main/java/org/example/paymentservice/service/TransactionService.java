@@ -1,5 +1,6 @@
 package org.example.paymentservice.service;
 
+import jakarta.transaction.Transactional;
 import org.apache.kafka.shaded.io.opentelemetry.proto.trace.v1.Status;
 import org.example.paymentservice.model.entity.Transaction;
 import org.example.paymentservice.repository.TransactionRepository;
@@ -16,6 +17,7 @@ public class TransactionService
         _transactionRepository = transactionRepository;
     }
 
+    @Transactional
     public Transaction createTransaction(Transaction transaction)
     {
         return _transactionRepository.save(transaction);
@@ -40,8 +42,7 @@ public class TransactionService
         }).orElseThrow(() -> new RuntimeException("Not found transaction: " + id));
     }
 
-    public Transaction findTransactionById(Long id)
-    {
+    public Transaction findTransactionById(Long id) {
         return _transactionRepository.findById(id).orElse(null);
 
     }
