@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @Data
 public class CreateTransactionDto {
 
-    private String fromAccountId;
-    private String toAccountId;
+    private Long fromAccountId;
+    private Long toAccountId;
     private BigDecimal amount;
 
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private AmountStatus status;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
     private String referenceNumber ;

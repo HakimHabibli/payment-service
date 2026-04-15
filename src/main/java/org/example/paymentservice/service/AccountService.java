@@ -1,11 +1,9 @@
 package org.example.paymentservice.service;
 
 import org.example.paymentservice.converter.Account.AccountMapper;
-import org.example.paymentservice.exception.NotFoundException;
 import org.example.paymentservice.model.dto.requestdto.Account.CreateAccountDto;
 import org.example.paymentservice.model.dto.requestdto.Account.UpdateAccountDto;
 import org.example.paymentservice.model.dto.responsedto.Account.GetAccountDto;
-import org.example.paymentservice.model.dto.responsedto.Account.GetAllAccountDto;
 import org.example.paymentservice.model.entity.Account;
 import org.example.paymentservice.repository.AccountRepository;
 import org.example.paymentservice.rules.AccountRules;
@@ -39,6 +37,7 @@ public class AccountService
     public CreateAccountDto createAccount(CreateAccountDto accountDto) {
         var acc =_accountMapper.createAccountDtoToEntity(accountDto);
         _accountRules.checkNotNull(acc);
+        _accountRules.checkIfEmployeeMaintainsSameCurrencyAccount(accountDto.getEmployeeId(),accountDto.getCurrency());
         var savedEntity = _accountRepository.save(acc);
         return _accountMapper.accountEntityToCreateAccountDto(savedEntity);
     }
@@ -55,8 +54,9 @@ public class AccountService
         return _accountMapper.accountEntityToUpdateAccountDto(savedAccount);
     }
 
-    public void deleteAccount(Long id)
-    {
+    public void deleteAccount(Long id) {
+
         _accountRepository.deleteById(id);
+
     }
 }

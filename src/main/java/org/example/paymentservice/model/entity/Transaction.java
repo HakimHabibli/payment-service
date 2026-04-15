@@ -1,8 +1,7 @@
 package org.example.paymentservice.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.example.paymentservice.model.enums.AmountStatus;
 import org.example.paymentservice.model.enums.TransactionType;
 
@@ -14,22 +13,26 @@ import java.util.List;
 @Setter
 @Getter
 @Table(name="user_transactions")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transaction
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fromAccountId;
-    private String toAccountId;
+    private Long fromAccountId;
+    private Long toAccountId;
     private BigDecimal amount;
 
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private AmountStatus status;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
+
 
     private String referenceNumber ;
     private String description ;
@@ -42,7 +45,8 @@ public class Transaction
     * */
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
 

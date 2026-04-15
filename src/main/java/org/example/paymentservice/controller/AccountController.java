@@ -14,29 +14,29 @@ import java.util.List;
 @RequestMapping("/api/account")
 public class AccountController
 {
-    private final AccountService _accountService;
+    private final AccountService accountService;
 
     public AccountController(AccountService accountService)
     {
-        _accountService = accountService;
+        this.accountService = accountService;
     }
 
     @GetMapping("/getById/{id}")
     public Account getById(@PathVariable Long id)
     {
-        return _accountService.findById(id);
+        return accountService.findById(id);
     }
 
     @GetMapping("all")
     public List<GetAccountDto> getAllAccounts()
     {
-        return _accountService.findAll();
+        return accountService.findAll();
     }
 
     @PostMapping("create")
     public ResponseEntity<CreateAccountDto> createAccount(@RequestBody CreateAccountDto account)
     {
-        var accountDto = _accountService.createAccount(account);
+        var accountDto = accountService.createAccount(account);
         return ResponseEntity
                 .ok(accountDto);
     }
@@ -44,13 +44,13 @@ public class AccountController
     @DeleteMapping("/delete/{id}")
     public void deleteAccount(@PathVariable Long id)
     {
-        _accountService.deleteAccount(id);
+        accountService.deleteAccount(id);
     }
 
     @PutMapping("/update/{id}")
     public UpdateAccountDto updateAccount(@RequestBody UpdateAccountDto account, @PathVariable Long id)
     {
-       return  _accountService.updateAccount(id, account);
+       return  accountService.updateAccount(id, account);
     }
 
 

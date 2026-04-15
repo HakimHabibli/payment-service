@@ -20,7 +20,7 @@ public class UpdateAccountDto
     private CurrencyType currency;
     private List<Transaction> transactions ;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private AccountStatus status ;
 }
 

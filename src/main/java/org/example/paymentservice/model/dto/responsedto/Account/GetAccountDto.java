@@ -17,7 +17,7 @@ public class GetAccountDto
     private BigDecimal balance ;
     private CurrencyType currency ;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private AccountStatus status ;
 
     private List<Transaction> transactions ;

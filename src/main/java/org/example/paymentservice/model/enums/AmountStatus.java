@@ -4,5 +4,7 @@ public enum AmountStatus
 {
     PENDING,
     SUCCESS,
-    FAILED
+    FAILED,
+    RESERVED,
+    CANCELLED,
 }
